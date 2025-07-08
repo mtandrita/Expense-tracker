@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tracker - Expense Tracker</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #c2e9fb, #a1c4fd);
+            color: #333;
+            padding: 40px;
+        }
+        .summary {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin-bottom: 30px;
+        }
+        input, button {
+            width: 90%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f0f8ff;
+        }
+        .delete-btn {
+    background-color: #e74c3c;
+    color: white;
+    padding: 12px 20px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
+    </style>
+</head>
+<body>
+ <section style="padding: 20px; max-width: 900px; margin: auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);background-color: aliceblue; padding-left: 20px">
+
+  <!-- 📋 Left Side: Text -->
+  <div style="flex: 1;">
+    <h2>Welcome to Your Expense Tracker</h2>
+      <p><strong>Tracking Month:</strong> {{ current_month }}</p>
+    <p><strong>Monthly Salary:</strong> ₹{{ salary }}</p>
+    <p><strong>Total Spent:</strong> ₹{{ total_spent }}</p>
+    <p><strong>Remaining Balance:</strong> ₹{{ remaining }}</p>
+    <p><strong>Average Expenditure This Month:</strong> ₹{{ average_spent }}</p>
+  </div>
+
+  <!-- 📊 Right Side: Pie Chart -->
+  <div style="flex: 0 0 auto;">
+    <img src="{{ url_for('static', filename=chart_url) }}" alt="Expense Chart"
+         style="max-width: 500px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+  </div></section>
+
+</div>
+
+   <form method="POST" action="/tracker">
+       <label for="date">Date</label>
+    <input type="date" id="date" name="date" required />
+  <label for="category">Category:</label><br>
+  <input type="text" name="category" placeholder="e.g. Food, Travel" required><br><br>
+
+  <label for="amount">Amount (₹):</label><br>
+  <input type="number" name="amount" step="0.01" placeholder="e.g. 200" required><br><br>
+
+  <label for="description">Description:</label><br>
+  <input type="text" name="description" placeholder="e.g. Lunch, Cab, Books"><br><br>
+
+  <button type="submit">Add Expense</button>
+</form>
+    <h3>Your Expenses</h3>
+    <table>
+  <tr>
+    <th>Date</th>
+    <th>Category</th>
+    <th>Amount</th>
+    <th>Description</th>
+  </tr>
+  {% for expense in expenses %}
+  <tr>
+    <td>{{ expense[0] }}</td>
+    <td>{{ expense[1] }}</td>
+    <td>₹{{ expense[2] }}</td>
+    <td>{{ expense[3] }}</td>
+  </tr>
+  {% endfor %}
+</table>
+<form method="POST" action="/delete_expenses" onsubmit="return confirm('Are you sure you want to delete all expenses?');">
+    <button type="submit" class="delete-btn">🗑️ Delete All Expenses</button>
+    <form method="POST" action="/start_new_month" onsubmit="return confirm('Start fresh for new month?');">
+    <button type="submit" class="delete-btn">🔄 Start New Month</button>
+</form>
+</form>
+</body>
+</html>

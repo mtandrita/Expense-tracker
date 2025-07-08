@@ -1,0 +1,14 @@
+# Ignore virtual environment
+.venv/
+
+# Ignore PyCharm project files
+.idea/
+
+# Ignore __pycache__ folders
+__pycache__/
+
+# Ignore SQLite database (optional)
+# expenses.db
+
+# Ignore compiled Python files
+*.pyc
